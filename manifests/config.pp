@@ -1,4 +1,10 @@
 class deploy::config {
+
+  validate_string($::deploy::private_key)
+  validate_string($::deploy::public_key)
+  validate_array($::deploy::from_ips)
+  validate_array($::deploy::groups)
+
   user{'deploy':
     ensure     => 'present',
     groups     => $::deploy::groups,
@@ -18,17 +24,26 @@ class deploy::config {
     mode    => '0755',
   }
 
+  $common_options = [
+    'command="/usr/bin/deploy"',
+    'no-pty',
+    'no-port-forwarding',
+    'no-X11-forwarding',
+  ]
+
+  $options = empty($::deploy::from_ips) ? {
+    false   => concat(
+      $common_options,
+      inline_template('from="<%= @from_ips.sort.join(",")%>),"')),
+    default => $common_options,
+  }
+
   ssh_authorized_key{'deploy on deploy':
     ensure  => 'present',
     user    => 'deploy',
     type    => 'ssh-rsa',
     key     => $::deploy::public_key,
-    options => [
-      'command="/usr/bin/deploy"',
-      'no-pty',
-      'no-port-forwarding',
-      'no-X11-forwarding',
-    ],
+    options => $options,
     require => File['/home/deploy/.ssh'],
   }
 
@@ -41,11 +56,20 @@ class deploy::config {
     require => File['/home/deploy/.ssh'],
   }
 
+  # don't prompt for remote host key validation
+  file {'/home/deploy/.ssh/config':
+    ensure  => 'present',
+    owner   => 'deploy',
+    group   => 'deploy',
+    content => "StrictHostKeyChecking no\n",
+    require => File['/home/deploy/.ssh'],
+  }
+
   file{'/etc/sudoers.d/deploy':
     ensure  => 'file',
     mode    => '0440',
     content => inline_template("# Managed by Puppet (${name})
-User_Alias DEPLOY = %deploy<% if @groups -%>, %<%= @groups.to_a.join(', %')  %><% end %>
+User_Alias DEPLOY = %deploy<% if !@groups.empty? -%>, %<%= @groups.join(', %')  %><% end %>
 Defaults:DEPLOY !umask
 DEPLOY ALL=(deploy) /usr/bin/deploy
 "),

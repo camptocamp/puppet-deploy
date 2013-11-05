@@ -24,6 +24,9 @@ The ssh-rsa private key of the deploy user.
 ####`public_key`
 The ssh-rsa public key of the deploy user.
 
+####`from_ips`
+Array of IPs allowed to connection to deploy user.
+
 ####`version`
 The version of deploy to install. Defaults to `latest`
 
