@@ -75,4 +75,12 @@ DEPLOY ALL=(deploy) /usr/bin/deploy
 "),
   }
 
+  file{'/var/cache/deploy':
+    ensure  => 'directory',
+    owner   => 'deploy',
+    group   => 'deploy',
+    mode    => '2775',
+    require => [User['deploy'], Group['deploy']],
+  }
+
 }
