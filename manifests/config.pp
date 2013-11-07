@@ -3,6 +3,7 @@ class deploy::config {
   validate_string($::deploy::private_key)
   validate_string($::deploy::public_key)
   validate_array($::deploy::from_ips)
+  validate_string($::deploy::group)
   validate_array($::deploy::groups)
 
   user{'deploy':
@@ -69,7 +70,7 @@ class deploy::config {
     ensure  => 'file',
     mode    => '0440',
     content => inline_template("# Managed by Puppet (${name})
-User_Alias DEPLOY = %deploy<% if !@groups.empty? -%>, %<%= @groups.join(', %')  %><% end %>
+User_Alias DEPLOY = %<%= @group %><% if !@groups.empty? -%>, %<%= @groups.join(', %')  %><% end %>
 Defaults:DEPLOY !umask
 DEPLOY ALL=(deploy) /usr/bin/deploy
 "),
@@ -78,9 +79,9 @@ DEPLOY ALL=(deploy) /usr/bin/deploy
   file{'/var/cache/deploy':
     ensure  => 'directory',
     owner   => 'deploy',
-    group   => 'deploy',
+    group   => $::deploy::group,
     mode    => '2775',
-    require => [User['deploy'], Group['deploy']],
+    require => [User['deploy'], Group[$::deploy::group]],
   }
 
 }

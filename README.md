@@ -28,10 +28,13 @@ The ssh-rsa public key of the deploy user.
 Array of IPs allowed to connection to deploy user.
 
 ####`version`
-The version of deploy to install. Defaults to `latest`
+The version of deploy to install. Defaults to `latest`.
+
+####`group`
+The primary group allowed to launch the `deploy` command. Defaults to `deploy`.
 
 ####`groups`
-The additional groups to which the deploy user belongs.
+The additional groups allowed to launch the `deploy` command.
 
 ###Class: deploy::config
 This class is used to configure deploy.

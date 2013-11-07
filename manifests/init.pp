@@ -5,6 +5,7 @@ class deploy(
   $public_key,
   $from_ips = [],
   $version  = 'present',
+  $group    = 'deploy',
   $groups   = [],
 ) {
 
@@ -12,6 +13,7 @@ class deploy(
   validate_string($public_key)
   validate_array($from_ips)
   validate_string($version)
+  validate_string($group)
   validate_array($groups)
 
   class{'deploy::install': } ->
