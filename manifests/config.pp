@@ -18,6 +18,13 @@ class deploy::config {
     system  => true,
   }
   ->
+  file {'/home/deploy':
+    ensure => 'directory',
+    owner  => 'deploy',
+    group  => 'deploy',
+    mode   => '0755',
+  }
+  ->
   file {'/home/deploy/.ssh':
     ensure  => 'directory',
     owner   => 'deploy',
