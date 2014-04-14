@@ -3,7 +3,6 @@ class deploy::config {
   validate_string($::deploy::private_key)
   validate_string($::deploy::public_key)
   validate_array($::deploy::from_ips)
-  validate_string($::deploy::group)
   validate_array($::deploy::groups)
 
   user{'deploy':
@@ -73,22 +72,27 @@ class deploy::config {
     require => File['/home/deploy/.ssh'],
   }
 
-  file{'/etc/sudoers.d/deploy':
-    ensure  => 'file',
-    mode    => '0440',
-    content => inline_template("# Managed by Puppet (${name})
-User_Alias DEPLOY = %<%= @group %><% if !@groups.empty? -%>, %<%= @groups.join(', %')  %><% end %>
+  $groups = $::deploy::groups
+  $sudo_groups = inline_template('%<%= @groups.join(", %") %>')
+
+  sudo::conf {'deploy':
+    ensure  => present,
+    content => "# Managed by Puppet (${name})
+User_Alias DEPLOY = ${sudo_groups}
 Defaults:DEPLOY !umask
 DEPLOY ALL=(deploy) /usr/bin/deploy
-"),
+",
   }
 
   file{'/var/cache/deploy':
     ensure  => 'directory',
     owner   => 'deploy',
-    group   => $::deploy::group,
+    group   => 'deploy',
     mode    => '2775',
-    require => [User['deploy'], Group[$::deploy::group]],
+  }
+
+  postgresql::server::role {'deploy':
+    superuser => true,
   }
 
 }
