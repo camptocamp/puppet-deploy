@@ -6,6 +6,7 @@ class deploy(
   $from_ips = [],
   $version  = 'present',
   $groups   = [],
+  $pg_role  = true,
 ) {
 
   validate_string($private_key)
@@ -13,6 +14,7 @@ class deploy(
   validate_array($from_ips)
   validate_string($version)
   validate_array($groups)
+  validate_boolean($pg_role)
 
   class{'deploy::install': } ->
   class{'deploy::config': } ->
