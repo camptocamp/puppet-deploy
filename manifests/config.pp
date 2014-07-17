@@ -4,7 +4,7 @@ class deploy::config {
   validate_string($::deploy::public_key)
   validate_array($::deploy::from_ips)
   validate_array($::deploy::groups)
-  validate_boolean($::deploy::pg_role)
+  validate_bool($::deploy::pg_role)
 
   user{'deploy':
     ensure     => 'present',

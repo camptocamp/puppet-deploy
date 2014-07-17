@@ -14,7 +14,7 @@ class deploy(
   validate_array($from_ips)
   validate_string($version)
   validate_array($groups)
-  validate_boolean($pg_role)
+  validate_bool($pg_role)
 
   class{'deploy::install': } ->
   class{'deploy::config': } ->
