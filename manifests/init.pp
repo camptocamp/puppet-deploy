@@ -3,10 +3,11 @@
 class deploy(
   $private_key,
   $public_key,
-  $from_ips = [],
-  $version  = 'present',
-  $groups   = [],
-  $pg_role  = true,
+  $from_ips  = [],
+  $version   = 'present',
+  $groups    = [],
+  $pg_role   = true,
+  $cache_dir = '/var/cache/deploy',
 ) {
 
   validate_string($private_key)

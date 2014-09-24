@@ -85,11 +85,18 @@ DEPLOY ALL=(deploy) /usr/bin/deploy
 ",
   }
 
-  file{'/var/cache/deploy':
+  file{$::deploy::cache_dir:
     ensure  => 'directory',
     owner   => 'deploy',
     group   => 'deploy',
     mode    => '2775',
+  }
+  if $::deploy::cache_dir != '/var/cache/deploy' {
+    file{'/var/cache/deploy':
+      ensure => link,
+      force   => true,
+      target => $::deploy::cache_dir,
+    }
   }
 
   if $::deploy::pg_role {
