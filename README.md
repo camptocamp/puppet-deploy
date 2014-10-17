@@ -33,6 +33,19 @@ The version of deploy to install. Defaults to `latest`.
 ####`groups`
 The groups allowed to launch the `deploy` command.
 
+####`pg_role`
+
+Wether to create a Postgresql role for deploy. Defaults to `true`.
+
+####`cache_dir`
+
+Path of the deploy cache directory, defaults to `/var/cache/deploy`.
+
+####`cache_dir_group`
+
+Group of the cache directory. Defaults to `deploy`. Set this to allow
+write access to a group of users.
+
 ###Class: deploy::config
 This class is used to configure deploy.
 
