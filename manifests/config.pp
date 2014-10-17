@@ -5,6 +5,8 @@ class deploy::config {
   validate_array($::deploy::from_ips)
   validate_array($::deploy::groups)
   validate_bool($::deploy::pg_role)
+  validate_absolute_path($::deploy::cache_dir)
+  validate_string($::deploy::cache_dir_group)
 
   user{'deploy':
     ensure     => 'present',
@@ -88,13 +90,13 @@ DEPLOY ALL=(deploy) /usr/bin/deploy
   file{$::deploy::cache_dir:
     ensure  => 'directory',
     owner   => 'deploy',
-    group   => 'deploy',
+    group   => $::deploy::cache_dir_group,
     mode    => '2775',
   }
   if $::deploy::cache_dir != '/var/cache/deploy' {
     file{'/var/cache/deploy':
       ensure => link,
-      force   => true,
+      force  => true,
       target => $::deploy::cache_dir,
     }
   }
