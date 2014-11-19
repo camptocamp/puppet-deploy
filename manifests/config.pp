@@ -68,11 +68,16 @@ class deploy::config {
 
   # don't prompt for remote host key validation
   file {'/home/deploy/.ssh/config':
-    ensure  => 'present',
-    owner   => 'deploy',
-    group   => 'deploy',
-    content => "StrictHostKeyChecking no\n",
-    require => File['/home/deploy/.ssh'],
+    ensure => 'present',
+    owner  => 'deploy',
+    group  => 'deploy',
+    mode   => '0640',
+  }->
+  sshd_config {'deploy_StrictHostKeyChecking':
+    key       => 'StrictHostKeyChecking',
+    condition => 'Host *',
+    value     => 'no',
+    target    => '/home/deploy/.ssh/config'
   }
 
   $groups = $::deploy::groups
