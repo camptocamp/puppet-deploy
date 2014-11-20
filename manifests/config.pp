@@ -73,11 +73,11 @@ class deploy::config {
     group  => 'deploy',
     mode   => '0640',
   }->
-  sshd_config {'deploy_StrictHostKeyChecking':
-    key       => 'StrictHostKeyChecking',
-    condition => 'Host *',
-    value     => 'no',
-    target    => '/home/deploy/.ssh/config'
+  ssh_config {'deploy_StrictHostKeyChecking':
+    key    => 'StrictHostKeyChecking',
+    host   => '*',
+    value  => 'no',
+    target => '/home/deploy/.ssh/config'
   }
 
   $groups = $::deploy::groups
