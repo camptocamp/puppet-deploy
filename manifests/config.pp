@@ -48,12 +48,27 @@ class deploy::config {
     default => $common_options,
   }
 
+  if defined(Sshd_config['AuthorizedKeysFile']) {
+    $target = '/etc/ssh/authorized_keys/deploy'
+    $user = 'root'
+    file { '/etc/ssh/authorized_keys/deploy':
+      ensure => file,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+    }
+  } else {
+    $target = undef
+    $user = 'deploy'
+  }
+
   ssh_authorized_key{'deploy on deploy':
     ensure  => 'present',
-    user    => 'deploy',
+    user    => $user,
     type    => 'ssh-rsa',
     key     => $::deploy::public_key,
     options => $options,
+    target  => $target,
     require => File['/home/deploy/.ssh'],
   }
 
