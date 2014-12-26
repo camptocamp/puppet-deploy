@@ -16,8 +16,8 @@ class deploy::config {
   }
   ->
   group{'deploy':
-    ensure  => 'present',
-    system  => true,
+    ensure => 'present',
+    system => true,
   }
   ->
   file {'/home/deploy':
@@ -28,10 +28,10 @@ class deploy::config {
   }
   ->
   file {'/home/deploy/.ssh':
-    ensure  => 'directory',
-    owner   => 'deploy',
-    group   => 'deploy',
-    mode    => '0755',
+    ensure => 'directory',
+    owner  => 'deploy',
+    group  => 'deploy',
+    mode   => '0755',
   }
 
   $common_options = [
@@ -108,10 +108,10 @@ DEPLOY ALL=(deploy) /usr/bin/deploy
   }
 
   file{$::deploy::cache_dir:
-    ensure  => 'directory',
-    owner   => 'deploy',
-    group   => $::deploy::cache_dir_group,
-    mode    => '2775',
+    ensure => 'directory',
+    owner  => 'deploy',
+    group  => $::deploy::cache_dir_group,
+    mode   => '2775',
   }
   if $::deploy::cache_dir != '/var/cache/deploy' {
     file{'/var/cache/deploy':
