@@ -73,7 +73,7 @@ class deploy::config {
   }
 
   file{'/home/deploy/.ssh/id_rsa':
-    ensure  => 'present',
+    ensure  => 'file',
     owner   => 'deploy',
     group   => 'deploy',
     mode    => '0600',
@@ -83,7 +83,7 @@ class deploy::config {
 
   # don't prompt for remote host key validation
   file {'/home/deploy/.ssh/config':
-    ensure => 'present',
+    ensure => 'file',
     owner  => 'deploy',
     group  => 'deploy',
     mode   => '0640',
@@ -92,7 +92,7 @@ class deploy::config {
     key    => 'StrictHostKeyChecking',
     host   => '*',
     value  => 'no',
-    target => '/home/deploy/.ssh/config'
+    target => '/home/deploy/.ssh/config',
   }
 
   $groups = $::deploy::groups

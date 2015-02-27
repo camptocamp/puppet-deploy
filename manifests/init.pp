@@ -18,7 +18,7 @@ class deploy(
   validate_array($groups)
   validate_bool($pg_role)
 
-  class{'deploy::install': } ->
-  class{'deploy::config': } ->
+  class{'::deploy::install': } ->
+  class{'::deploy::config': } ->
   Class['deploy']
 }
