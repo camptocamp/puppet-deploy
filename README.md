@@ -1,6 +1,8 @@
 puppet-deploy
 =============
 
+[![Build Status](https://img.shields.io/travis/camptocamp/puppet-deploy/master.svg)](https://travis-ci.org/camptocamp/puppet-deploy)
+
 Overview
 --------
 
