@@ -95,16 +95,18 @@ class deploy::config {
     target => '/home/deploy/.ssh/config',
   }
 
-  $groups = $::deploy::groups
-  $sudo_groups = inline_template('%<%= @groups.join(", %") %>')
+  if $::deploy::enable_sudo {
+    $groups = $::deploy::groups
+    $sudo_groups = inline_template('%<%= @groups.join(", %") %>')
 
-  sudo::conf {'deploy':
-    ensure  => present,
-    content => "# Managed by Puppet (${name})
-User_Alias DEPLOY = ${sudo_groups}
-Defaults:DEPLOY !umask
-DEPLOY ALL=(deploy) /usr/bin/deploy
-",
+    sudo::conf {'deploy':
+      ensure  => present,
+      content => "# Managed by Puppet (${name})
+      User_Alias DEPLOY = ${sudo_groups}
+      Defaults:DEPLOY !umask
+      DEPLOY ALL=(deploy) /usr/bin/deploy
+      ",
+    }
   }
 
   file{$::deploy::cache_dir:

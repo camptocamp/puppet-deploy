@@ -9,6 +9,7 @@ class deploy(
   $pg_role         = true,
   $cache_dir       = '/var/cache/deploy',
   $cache_dir_group = 'deploy',
+  $enable_sudo     = true,
 ) {
 
   validate_string($private_key)
