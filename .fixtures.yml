@@ -1,0 +1,12 @@
+---
+fixtures:
+  repositories:
+    sudo:
+      repo: 'git://github.com/camptocamp/puppet-sudo.git'
+      ref: 'HEAD'
+  forge_modules:
+    augeasproviders_core: 'herculesteam/augeasproviders_core'
+    augeasproviders_ssh: 'herculesteam-augeasproviders_ssh'
+    stdlib: 'puppetlabs-stdlib'
+  symlinks:
+    deploy: "#{source_dir}"
