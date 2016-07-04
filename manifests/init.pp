@@ -1,8 +1,8 @@
 # == Class: deploy
 #
 class deploy(
-  $private_key,
-  $public_key,
+  $private_key     = undef,
+  $public_key      = undef,
   $from_ips        = [],
   $version         = 'present',
   $groups          = [],
@@ -12,8 +12,6 @@ class deploy(
   $enable_sudo     = true,
 ) {
 
-  validate_string($private_key)
-  validate_string($public_key)
   validate_array($from_ips)
   validate_string($version)
   validate_array($groups)

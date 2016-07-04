@@ -1,7 +1,5 @@
 class deploy::config {
 
-  validate_string($::deploy::private_key)
-  validate_string($::deploy::public_key)
   validate_array($::deploy::from_ips)
   validate_array($::deploy::groups)
   validate_bool($::deploy::pg_role)
@@ -62,23 +60,27 @@ class deploy::config {
     $user = 'deploy'
   }
 
-  ssh_authorized_key{'deploy on deploy':
-    ensure  => 'present',
-    user    => $user,
-    type    => 'ssh-rsa',
-    key     => $::deploy::public_key,
-    options => $options,
-    target  => $target,
-    require => File['/home/deploy/.ssh'],
+  if $::deploy::public_key != undef {
+    ssh_authorized_key{'deploy on deploy':
+      ensure  => 'present',
+      user    => $user,
+      type    => 'ssh-rsa',
+      key     => $::deploy::public_key,
+      options => $options,
+      target  => $target,
+      require => File['/home/deploy/.ssh'],
+    }
   }
 
-  file{'/home/deploy/.ssh/id_rsa':
-    ensure  => 'file',
-    owner   => 'deploy',
-    group   => 'deploy',
-    mode    => '0600',
-    content => $::deploy::private_key,
-    require => File['/home/deploy/.ssh'],
+  if $::deploy::private_key != undef {
+    file{'/home/deploy/.ssh/id_rsa':
+      ensure  => 'file',
+      owner   => 'deploy',
+      group   => 'deploy',
+      mode    => '0600',
+      content => $::deploy::private_key,
+      require => File['/home/deploy/.ssh'],
+    }
   }
 
   # don't prompt for remote host key validation
