@@ -12,19 +12,19 @@ class deploy::config {
     managehome => true,
     system     => true,
   }
-  
+
   -> group{'deploy':
     ensure => 'present',
     system => true,
   }
-  
+
   -> file {'/home/deploy':
     ensure => 'directory',
     owner  => 'deploy',
     group  => 'deploy',
     mode   => '0755',
   }
-  
+
   -> file {'/home/deploy/.ssh':
     ensure => 'directory',
     owner  => 'deploy',
